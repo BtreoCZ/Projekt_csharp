@@ -1,0 +1,48 @@
+﻿<Window x:Class="Sprava_prihlasek.StudyApplications"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Sprava_prihlasek"
+        mc:Ignorable="d"
+        Title="StudyApplications" Height="450" Width="800">
+    <Grid Background="#FFF0F8FF">
+        <DataGrid x:Name="Prihlasky"
+              AutoGenerateColumns="False"
+              IsReadOnly="True"
+              VerticalAlignment="Top"
+              >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID Přihlášky" Binding="{Binding HighschoolApplicationId}" Width="*"/>
+                <DataGridTextColumn Header="ID Studenta" Binding="{Binding StudentId}" Width="*"/>
+                <DataGridTextColumn Header="Datum Přihlášky" Binding="{Binding ApplicationDate}" Width="*"/>
+                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*"/>
+                <DataGridTemplateColumn Header="Odstranit" Width="100">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Odstranit" Click="Delete"  Tag="{Binding HighSchoolApplicationId}"
+                                 BorderThickness="1"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Aktualizovat" Width="100">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Aktualizovat" Click="Update" Tag="{Binding HighschoolApplicationId}"
+                                 BorderThickness="1"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Zobrazit SP" Width="100">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Zobrazit SP" Click="Show" Tag="{Binding HighschoolApplicationId}"
+                                 BorderThickness="1"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+    </Grid>
+</Window>

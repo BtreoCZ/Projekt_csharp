@@ -1,0 +1,22 @@
+﻿<Window x:Class="Sprava_prihlasek.StudyFieldsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Sprava_prihlasek"
+        mc:Ignorable="d"
+        Title="StudyFieldsWindow" Height="450" Width="800">
+    <Grid>
+        <DataGrid Name="Obory" AutoGenerateColumns="False" Margin="10" IsReadOnly="True" VerticalAlignment="Top">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding StudyFieldId}" Width="50"/>
+                <DataGridTextColumn Header="ID školy" Binding="{Binding HighSchoolId}" Width="60"/>
+                <DataGridTextColumn Header="Identifikační kód" Binding="{Binding StudyFieldCode}" Width="200"/>
+                <DataGridTextColumn Header="Název SP" Binding="{Binding StudyName}" Width="*"/>
+                <DataGridTextColumn Header="Popis SP" Binding="{Binding StudyDesc}" Width="*"/>
+                <DataGridTextColumn Header="Počet míst" Binding="{Binding StudySlots}" Width="100"/>
+                <DataGridCheckBoxColumn Header="S maturitou" Binding="{Binding Graduation}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>

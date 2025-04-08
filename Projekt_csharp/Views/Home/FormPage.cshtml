@@ -1,0 +1,152 @@
+﻿@using Databaze_tabulky
+@model Projekt_csharp.Models.InputForm
+
+@{
+    ViewData["Title"] = "Input Form";
+}
+
+<h2>Input Form</h2>
+
+<form asp-action="Submit" method="post">
+    <div class="form-group">
+        <label asp-for="Jmeno"></label>
+        <input asp-for="Jmeno" class="form-control" />
+        <span asp-validation-for="Jmeno" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Prijmeni"></label>
+        <input asp-for="Prijmeni" class="form-control" />
+        <span asp-validation-for="Prijmeni" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Telefon"></label>
+        <input asp-for="Telefon" class="form-control" />
+        <span asp-validation-for="Telefon" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="RC"></label>
+        <input asp-for="RC" class="form-control" />
+        <span asp-validation-for="RC" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="DatumNarozeni"></label>
+        <input asp-for="DatumNarozeni" type="date" class="form-control" />
+        <span asp-validation-for="DatumNarozeni" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Adresa"></label>
+        <input asp-for="Adresa" class="form-control" />
+        <span asp-validation-for="Adresa" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Mesto"></label>
+        <input asp-for="Mesto" class="form-control"/>
+        <span asp-validation-for="Mesto" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="PSC"></label>
+        <input asp-for="PSC" class="form-control" />
+        <span asp-validation-for="PSC" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label>Škola</label>
+        <select id="selectSkola1"  class="form-control" onchange="loadStudyFields(this, 'selectObor1')">
+            <option value="">-- Vyberte školu --</option>
+            @foreach (var skola in (List<HighSchool>)ViewBag.skoly)
+            {
+                <option value="@skola.HighSchoolId">@skola.Name</option>
+            }
+        </select>
+        <label>Obor školy</label>
+        <select asp-for="studyProgramID1" id="selectObor1" name="SelectObor1" class="form-control" onchange="updateStudyProgramIds()"></select>
+
+        <label>Škola</label>
+        <select id="selectSkola2" class="form-control" onchange="loadStudyFields(this, 'selectObor2')">
+            <option value="">-- Vyberte školu --</option>
+            @foreach (var skola in (List<HighSchool>)ViewBag.skoly)
+            {
+                <option value="@skola.HighSchoolId">@skola.Name</option>
+            }
+        </select>
+        <label>Obor školy</label>
+        <select asp-for="studyProgramID2" id="selectObor2" name="SelectObor2" class="form-control" onchange="updateStudyProgramIds()"></select>
+
+        <label>Škola</label>
+        <select id="selectSkola3" class="form-control" onchange="loadStudyFields(this, 'selectObor3')">
+            <option value="">-- Vyberte školu --</option>
+            @foreach (var skola in (List<HighSchool>)ViewBag.skoly)
+            {
+                <option value="@skola.HighSchoolId">@skola.Name</option>
+            }
+        </select>
+        <label>Obor školy</label>
+        <select asp-for="studyProgramID3" id="selectObor3" name="SelectObor3" class="form-control" onchange="updateStudyProgramIds()"></select>
+    </div>
+    <input type="hidden" id="studyProgramIds" asp-for="studyFields" />
+    <button type="submit" onclick="updateStudyProgramIds()" class="btn btn-primary">Submit</button>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        function loadStudyFields(selectElement, targetSelectId) {
+            var highschoolId = selectElement.value;
+            var targetSelect = document.getElementById(targetSelectId);
+
+            if (highschoolId) {
+                $.ajax({
+                    url: '@Url.Action("GetStudyFields", "Home")',
+                    data: { highschoolId: highschoolId },
+                    success: function (data) {
+                        console.log(data)
+                        targetSelect.innerHTML = '';
+                        if (data.length > 0) {
+                            for (var i = 0; i < data.length; i++) {
+                                console.log(data[i]);
+                                var option = document.createElement('option');
+                                option.value = data[i].studyFieldId;
+                                option.text = data[i].studyName;
+                                targetSelect.appendChild(option);
+                            }
+                        } else {
+                            var option = document.createElement('option');
+                            option.value = '';
+                            option.text = '-- Žádné obory nenalezeny --';
+                            targetSelect.appendChild(option);
+                        }
+                    }
+                });
+            } else {
+                targetSelect.innerHTML = '';
+                var option = document.createElement('option');
+                option.value = '';
+                option.text = '-- Vyberte školu --';
+                targetSelect.appendChild(option);
+            }
+            updateStudyProgramIds();
+        }
+        
+
+        function updateStudyProgramIds() {
+            document.getElementById("studyProgramIds").value = '';
+            var studyProgramIds = [];
+            var selectObor1 = document.getElementById("selectObor1").value;
+            var selectObor2 = document.getElementById("selectObor2").value;
+            var selectObor3 = document.getElementById("selectObor3").value;
+            console.log(selectObor1 + " " + selectObor2 + " " + selectObor3);
+            if (selectObor1 && selectObor2 && selectObor3) {
+                console.log(selectObor1 + " " + selectObor2 + " " + selectObor3);
+                document.getElementById("studyProgramIds").value = selectObor1 + "," + selectObor2 + "," + selectObor3;
+            } 
+        }
+    </script>
+}
